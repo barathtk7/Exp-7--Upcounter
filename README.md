@@ -21,7 +21,8 @@ else count <= count;                // holds present value
 ## Design / RTL Program
 
 // gedit up_counter.v
- ```
+ // gedit up_counter.v
+ 
 module up_counter (
     input  wire       clk,    // clock
     input  wire       rst,    // asynchronous active-high reset
@@ -37,67 +38,108 @@ module up_counter (
             count <= count;          // hold
     end
 endmodule
-
-```
 ## Testbench Program
 
 // gedit tb7.v
+module tb7; 
 
+    reg  clk, rst, en; 
 
+    wire [3:0] count; 
 
- 
-module tb7;
+  
 
-    reg  clk, rst, en;
-    wire [3:0] count;
- 
-    // Instantiate the up-counter
-    up_counter uut (
-        .clk(clk),
-        .rst(rst),
-        .en(en),
-        .count(count)
-    );
- 
-    // ---- Clock generation: 10 time-unit period ----
-    initial clk = 0;
-    always #5 clk = ~clk;
- 
-    initial begin
-        // ---- VCD dump setup ----
-        $dumpfile("up_counter.vcd");   // name of the VCD file to be generated
-        $dumpvars(0, tb7);               // dump all signals in this testbench hierarchy
- 
-        $monitor("Time=%0t rst=%b clk=%b en=%b | count=%b (%0d)",
-                  $time, rst, clk, en, count, count);
- 
-        // ---- Apply asynchronous reset ----
-        rst = 1; en = 0;
-        #7  rst = 0;
- 
-        // ---- Disable counting: count should hold at 0 ----
-        @(negedge clk);
-        @(negedge clk);
- 
-        // ---- Enable counting and let it run past overflow ----
-        en = 1;
-        repeat (18) @(negedge clk);   // 18 clocks: 4-bit count wraps around once
- 
-        // ---- Disable again and confirm the count holds ----
-        en = 0;
-        @(negedge clk);
-        @(negedge clk);
- 
-        // ---- Apply reset again mid-simulation ----
-        rst = 1;
-        @(negedge clk);
-        rst = 0; en = 1;
-        repeat (3) @(negedge clk);
- 
-        #20 $finish;
-    end
-    endmodule
+    // Instantiate the up-counter 
 
+    up_counter uut ( 
+
+        .clk(clk), 
+
+        .rst(rst), 
+
+        .en(en), 
+
+        .count(count) 
+
+    ); 
+
+  
+
+    // ---- Clock generation: 10 time-unit period ---- 
+
+    initial clk = 0; 
+
+    always #5 clk = ~clk; 
+
+  
+
+    initial begin 
+
+        // ---- VCD dump setup ---- 
+
+        $dumpfile("up_counter.vcd");   // name of the VCD file to be generated 
+
+        $dumpvars(0, tb7);               // dump all signals in this testbench hierarchy 
+
+  
+
+        $monitor("Time=%0t rst=%b clk=%b en=%b | count=%b (%0d)", 
+
+                  $time, rst, clk, en, count, count); 
+
+  
+
+        // ---- Apply asynchronous reset ---- 
+
+        rst = 1; en = 0; 
+
+        #7  rst = 0; 
+
+  
+
+        // ---- Disable counting: count should hold at 0 ---- 
+
+        @(negedge clk); 
+
+        @(negedge clk); 
+
+  
+
+        // ---- Enable counting and let it run past overflow ---- 
+
+        en = 1; 
+
+        repeat (18) @(negedge clk);   // 18 clocks: 4-bit count wraps around once 
+
+  
+
+        // ---- Disable again and confirm the count holds ---- 
+
+        en = 0; 
+
+        @(negedge clk); 
+
+        @(negedge clk); 
+
+  
+
+        // ---- Apply reset again mid-simulation ---- 
+
+        rst = 1; 
+
+        @(negedge clk); 
+
+        rst = 0; en = 1; 
+
+        repeat (3) @(negedge clk); 
+
+  
+
+        #20 $finish; 
+
+    end 
+
+endmodule
 ## Operation / Truth Table
 
 State transition (en = 1, rst = 0 unless noted)
@@ -160,7 +202,7 @@ The design was compiled and simulated using Synopsys VCS, and the functionality 
 
 ## Output
 
-<img width="609" height="173" alt="image" src="https://github.com/user-attachments/assets/34051c7c-087f-4759-a55f-1af528460ca0" />
+<img width="1917" height="1017" alt="Screenshot 2026-10-23 124638" src="https://github.com/user-attachments/assets/f17cd5af-af89-4429-a217-8e26618b9b12" />
 
 ## Viva-Voce Questions
 
